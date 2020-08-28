@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} {{ restau.intitule_tag }}  {% endblock %}  
+{% block content %}
+
+<form action="{% url 'index'  %}">
+    <button type="submit"  class="btn btn-primary"> Retour</button>
+ </form>
+
+<br/><br/>
+{% for n in restau %}    
+       
+<h2>Detail {{ n.intitule }}</h2> <br>
+
+<ul>
+    {% for k in n.cuisine.all %}
+    <li>{{ k.intitule }}</li>
+    {% endfor %}
+    <li>{{ n.adresse }}</li>
+    <li>{{ n.numtele }}</li>
+    <li>{{ n.horaire }}</li>
+    <li>{{ n.website }}</li>
+</ul>
+
+{% endfor %}
+</html>
+{% endblock %}

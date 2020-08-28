@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Accounts',
     'widget_tweaks',
     'location_field.apps.DefaultConfig',
+    'Restaurant',
 ]
 
 LOCATION_FIELD = {
@@ -129,3 +130,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'hibatouallah.1996@gmail.com'
+EMAIL_HOST_PASSWORD = 'jiJI20-21'
+EMAIL_PORT = 587

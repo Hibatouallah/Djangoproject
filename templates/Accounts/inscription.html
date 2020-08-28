@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %} page d'inscription{% endblock %}
+{% block content %}
+<html>
+    <head>
+        <title>Page d'inscription</title>
+    </head>
+    <body>
+        <div>
+            <a href="{% url 'comptegratuit_inscription' %}">comptegratuit</a>
+        </div>
+        <div>
+            <a href="{% url 'comptepayant_inscription' %}">comptepayant</a>
+        </div>
+    </body>
+</html>
+
+{% endblock %}

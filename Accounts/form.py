@@ -8,11 +8,11 @@ class ComptegratuitInscriptionForm(UserCreationForm):
     last_name = forms.CharField(required=True)
     first_name = forms.CharField(required=True)
     website = forms.CharField(required=False)
-    description = forms.CharField(required=True)
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Please enter the  description'}),required=True)
     email = forms.EmailField(required=True)
     ville = forms.CharField(required=True)
-    photoprofil = forms.FileField(required=False)
-    photocouverture = forms.FileField(required=False)
+    photoprofil = forms.ImageField(required = False)
+    photocouverture = forms.ImageField(required = False)
     pays = forms.CharField(required=True)
     codepostal = forms.CharField(required=True)
     numtel =forms.CharField(required=True)
@@ -50,6 +50,7 @@ class ComptegratuitInscriptionForm(UserCreationForm):
 
 class ComptepayantInscriptionForm(UserCreationForm):
     cin = forms.CharField(required=True)
+    photoprofil = forms.ImageField(required=False)
     last_name = forms.CharField(required=True)
     first_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
@@ -77,6 +78,7 @@ class ComptepayantInscriptionForm(UserCreationForm):
 
         comptepayant.pays = self.cleaned_data.get('pays')
         comptepayant.codepostal = self.cleaned_data.get('codepostal')
+        comptepayant.photoprofil = self.cleaned_data.get('photoprofil')
         comptepayant.numtel = self.cleaned_data.get('numtel')
         comptepayant.save()
         return utilisateur

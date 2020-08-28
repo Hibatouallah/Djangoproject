@@ -1,0 +1,18 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+   
+<h2>Ajouter un post:</h2> <br>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token%}
+    {{ form }}
+    <button class="btn btn-secondary">Post</button>
+</form>
+
+
+{% endblock %}
+
+</html>
+
+

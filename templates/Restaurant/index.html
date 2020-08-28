@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+           
+<h2>Liste des restaurant:</h2> <br>
+
+{% for restau in object_list %}
+<ul>
+<li><h4>{{ restau.intitule }}</h4></li>
+<li>
+    {% for k in restau.cuisine.all %}
+    {{ k.intitule }} -
+    {% endfor %}
+</li>
+<li>
+    <form action="{% url 'detailrestau' restau.intitule|slugify %}">
+        <button type="submit"  class="btn btn-primary">Order Online</button>
+     </form>
+ </li>
+</ul>
+{% endfor %}
+
+{% endblock %}
+
+</html>
+
+
