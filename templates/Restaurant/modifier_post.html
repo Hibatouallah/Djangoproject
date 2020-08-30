@@ -4,12 +4,20 @@
 {% block content %}
            
 <h2>Editer post infos:</h2> <br>
-<form method="POST">
+{% if user.is_authenticated%}
+<div class="col-sm-9">
+<div class="form-group">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token%}
-    {{form.as_p}}
+    {{ form.media }}
+    {{ form.as_p }}
     <button class="btn btn-secondary">Editer</button>
 </form>
-
+</div>
+{% else %}
+<p> authentifiez-vous pour modifier le post ,<a href="{% url 'comptegratuit_login' %}">cliquer ici.</a> </p>
+</div>
+{% endif %}
 
 {% endblock %}
 

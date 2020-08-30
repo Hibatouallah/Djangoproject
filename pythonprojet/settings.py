@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'location_field.apps.DefaultConfig',
     'Restaurant',
+    'ckeditor',
 ]
 
 LOCATION_FIELD = {

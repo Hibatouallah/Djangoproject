@@ -47,6 +47,7 @@ class comptegratuit_inscription(CreateView):
         return redirect('AcceuilComptegratuit')
 """
 def comptegratuit_inscription(request):
+        
         if request.method == 'POST':
             form = ComptegratuitInscriptionForm(request.POST,request.FILES)
             if form.is_valid():

@@ -9,7 +9,7 @@
 <ul>
 <li><h4>{{ p.user }}</h4></li>
 <li><img src="{{ p.image.url }}"></li>
-<li>{{ p.description }}</li>
+<li>{{ p.description|safe }}</li>
 <li>{{ p.restaurant }}</li>
 <form action="{% url 'editpost' p.id|slugify %}">
     <button type="submit"  class="btn btn-primary"> Edit poste </button>
@@ -18,6 +18,7 @@
     <button type="submit"  class="btn btn-primary"> Supprimer poste </button>
  </form>
 </ul>
+
 {% endfor %}
 
 {% endblock %}

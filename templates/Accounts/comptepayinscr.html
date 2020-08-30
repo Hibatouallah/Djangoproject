@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 {% block title %} page d'inscription {% endblock %}
 {% block content %}
-  <h2>Sign up</h2>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-      {% for field in form %}
+  <h2>S' inscrir : </h2>
+  <div class="col-sm-5">
+    <div class="form-group">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+<!--
+     {% for field in form %}
       <p>
         {{ field.label_tag }}<br>
         {{ field }}
@@ -16,6 +26,4 @@
         {% endfor %}
       </p>
       {% endfor %}
-    <button type="submit" class="btn btn-primary">Sign up</button>
-  </form>
-{% endblock %}
+-->

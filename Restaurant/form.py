@@ -1,23 +1,42 @@
 
 from django.db import transaction
-from .models import Post , Restaurant
+from .models import Post , Restaurant,Commentaire
 from django import forms
 from django.forms import ModelForm
 
-class PostForm(forms.Form):
-    #user = forms.IntegerField(widget=forms.HiddenInput()) 
-    description = forms.CharField(widget=forms.Textarea)
-    restau = forms.ModelChoiceField(queryset=Restaurant.objects.all(), empty_label=None)
-    image = forms.ImageField()
 
-    @transaction.atomic
-    def save(self):
-     
-        post = Post.objects.create(user = 2)
-        #post.user = self.cleaned_data.get('user')
-        post.description = self.cleaned_data.get('description')
-        post.restau = self.cleaned_data.get('restau')
-        post.image = self.cleaned_data.get('image')
+class AjouterPostForm(forms.ModelForm):
+    image = forms.ImageField(required=False, widget=forms.FileInput)
+    class Meta:
+        model = Post
+        fields = ('restaurant','description','image')
 
-        Post.save()
-        return Post
+        widgets = {
+            'restaurant': forms.Select(attrs={'class':'form-control'}),
+            'description': forms.Textarea(attrs={'class':'form-control'}),
+            'image' : forms.ImageField(required=False),
+        }
+
+class ModifierPostForm(forms.ModelForm):
+    image = forms.ImageField(required=False, widget=forms.FileInput)
+    class Meta:
+        model = Post
+        fields = ('description','image')
+
+        widgets = {
+ 
+            'description': forms.Textarea(attrs={'class':'form-control'}),
+            'image' : forms.ImageField(required=False),
+        }
+
+class CommentaireForm(forms.ModelForm):
+    image = forms.ImageField(required=False, widget=forms.FileInput)
+    class Meta:
+        model = Commentaire
+        fields = ('intitule','description','image')
+
+        widgets = {
+            'intitule': forms.TextInput(attrs={'class':'form-control'}),
+            'description': forms.Textarea(attrs={'class':'form-control'}),
+            'image' : forms.ImageField(required=False),
+        }

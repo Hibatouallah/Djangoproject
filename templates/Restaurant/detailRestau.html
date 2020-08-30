@@ -7,8 +7,9 @@
  </form>
 
 <br/><br/>
+<h2>{{city }}</h2>
 {% for n in restau %}    
-       
+    
 <h2>Detail {{ n.intitule }}</h2> <br>
 
 <ul>
@@ -19,7 +20,32 @@
     <li>{{ n.numtele }}</li>
     <li>{{ n.horaire }}</li>
     <li>{{ n.website }}</li>
+    <li>{{ total }} likes</li>
 </ul>
+<hr>
+<h2>Commentaires:</h2>
+{% if not n.commentaire.all %}
+  commentaire vide ... 
+{%  else %}
+{% if user.is_authenticated%}
+<a href="{% url 'ajouter_commentaire' n.pk %}">Ajouter un commentaire </a>
+<br/>
+{% endif %}
+ {% for com in n.commentaire.all%}
+
+ <strong>
+  {{ com.intitule }} -
+  {{ com.date_added }}
+</strong>
+ {{ com.description|safe }}
+ <img src="{{ com.image.url  }}">
+ <form action="{% url 'like_comm' com.pk %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" name="commentaire_id" class="btn btn-primary" value="{{ com.id }}"> J'aime</button>
+ </form>
+{% endfor %}
+ {% endif %}
+</hr>
 
 {% endfor %}
 </html>

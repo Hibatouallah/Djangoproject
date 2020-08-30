@@ -3,7 +3,7 @@ from Accounts.models import Comptepayant,Comptegratuit
 from django.urls import reverse
 from django.contrib.sessions.backends.db import SessionStore
 from Accounts.views import comptegratuit_login
-s = SessionStore()
+from ckeditor.fields import RichTextField
 
 
 class Cuisine(models.Model):
@@ -23,6 +23,11 @@ class Restaurant(models.Model):
     horaire = models.CharField(max_length=20)
     adresse = models.CharField(max_length=1000)
     numtele = models.CharField(max_length=20)
+    likes = models.ManyToManyField(Comptegratuit,related_name='restaurant')
+    
+    def total_likes(self):
+        return self.likes.count()
+    
     def __str__(self):
         return f'{self.intitule}'
     """
@@ -32,12 +37,16 @@ class Restaurant(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(Comptegratuit,on_delete=models.CASCADE)
-    description = models.CharField(max_length=2000,null=True,blank=True)
+    #description = models.CharField(max_length=2000,null=True,blank=True)
+    description = RichTextField(null=True,blank=True)
     restaurant = models.ForeignKey(Restaurant,on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg',upload_to='restau_pics',blank=True,null=True)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(Comptegratuit,related_name='posts')
+    
+    
     def __str__(self):
         return self.user.utilisateur.username + 'post' + str(self.id)
     def get_absolute_url(self):
@@ -75,7 +84,7 @@ class Menu(models.Model):
     slug = models.SlugField(max_length=24,null=True, unique=True, help_text='The slug is the URL friendly version of the menu name, so that this can be accessed at a URL like mysite.com/menus/dinner/.')
     description = models.CharField(max_length=128, null=True, blank=True, help_text='Any additional text that the menu might need, i.e. Served between 11:00am and 4:00pm.')
     order = models.PositiveSmallIntegerField(default=0, help_text='The order of the menu determines where this menu appears alongside other menus.')
-	
+
     def save(self,*args,**kwargs):
         if not self.slug:
             self.slug = slugify(self.intitule)
@@ -111,3 +120,22 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return f'{self.intitule}'
+
+
+class Commentaire(models.Model):
+    restaurant = models.ForeignKey(Restaurant,related_name="commentaire",on_delete=models.CASCADE)
+    user = models.ForeignKey(Comptegratuit,on_delete=models.CASCADE)
+    intitule = models.CharField(max_length=100)
+    description = RichTextField(null=True,blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='restaucommentaire',null=True,blank=True)
+    likes = models.ManyToManyField(Comptegratuit,related_name='commentairelike')
+    
+    def total_likes(self):
+        return self.likes.count()
+    
+    def __str__(self):
+        return '%s - %s' % (self.restaurant.intitule, self.user.utilisateur.username)
+
+    def get_absolute_url(self):
+        return reverse('detailrestau', args=[self.restaurant.intitule])

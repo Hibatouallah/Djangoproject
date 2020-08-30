@@ -5,16 +5,24 @@
            
 <h2>Liste des restaurant:</h2> <br>
 
-{% for restau in object_list %}
+{% for res in restau %}
 <ul>
-<li><h4>{{ restau.intitule }}</h4></li>
+    {% if user.is_authenticated%}
+<li> 
+    <form action="{% url 'like_restau' res.pk %}" method="POST">
+       {% csrf_token %}
+       <button type="submit" name="restaurant_id" class="btn btn-primary" value="{{ res.id }}"> J'aime</button>
+    </form>
+</li>
+{% endif %}
+<li><h4>{{ res.intitule }}</h4></li>
 <li>
-    {% for k in restau.cuisine.all %}
+    {% for k in res.cuisine.all %}
     {{ k.intitule }} -
     {% endfor %}
 </li>
 <li>
-    <form action="{% url 'detailrestau' restau.intitule|slugify %}">
+    <form action="{% url 'detailrestau' res.intitule|slugify %}">
         <button type="submit"  class="btn btn-primary">Order Online</button>
      </form>
  </li>

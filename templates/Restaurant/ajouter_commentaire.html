@@ -1,0 +1,28 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+   
+<h2>Ajouter un commentaire:</h2> <br>
+{% if user.is_authenticated%}
+<div class="col-sm-9">
+<div class="form-group">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token%}
+    {{ form.media }}
+    {{ form.as_p }}
+    <br/>
+   
+    <button class="btn btn-secondary">Ajouter</button>
+</form>
+{% else %}
+<p> authentifiez-vous pour ajouter un commentaire ,<a href="{% url 'comptegratuit_login' %}">cliquer ici.</a> </p>
+{% endif %}
+ 
+</div>
+</div>
+{% endblock %}
+
+</html>
+
+
