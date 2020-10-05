@@ -2,16 +2,16 @@
 {% block title %} page d'inscription{% endblock %}
 {% block content %}
 <html>
-    <head>
-        <title>Page d'inscription</title>
-    </head>
+    
     <body>
-        <div>
-            <a href="{% url 'comptegratuit_inscription' %}">comptegratuit</a>
-        </div>
-        <div>
-            <a href="{% url 'comptepayant_inscription' %}">comptepayant</a>
-        </div>
+        <header class="masthead">
+            <div class="container">
+                <div class="masthead-subheading">Welcome To Awsome Restaurants in Morocco!</div>
+                <div class="masthead-heading text-uppercase">It's Nice To Meet You</div>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'comptegratuit_inscription' %}">Sign up as Client For free</a>
+                <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'comptepayant_inscription' %}">Sgn up as Restaurant Owner</a>
+            </div>
+        </header>
     </body>
 </html>
 

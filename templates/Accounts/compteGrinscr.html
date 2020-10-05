@@ -1,19 +1,18 @@
 {% extends 'base.html' %}
 {% block title %} page d'inscription{% endblock %}
 {% block content %}
-
-  <h2>S'inscrir : </h2>
-  <div class="col-sm-5">
+<br><br>
+<div class="container">
+  <h2>Sign up : </h2>
+  <div class="col-sm-7">
     <div class="form-group">
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-        {{ form.as_p }}
- 
-    
+        {{ form.as_p }}  
     <button type="submit" class="btn btn-primary" >Sign up</button>
   </form>
     </div>
   </div>
-
+</div>
 {% endblock %}
 

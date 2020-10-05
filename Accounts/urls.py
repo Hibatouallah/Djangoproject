@@ -3,8 +3,8 @@ from django.conf.urls import url
 from django.conf.urls.static import static,serve
 from django.conf import settings
 from .import views
-from .views import compteGratuiteditinfo ,compteGratuiteditdetails
-
+from .views import CompteGratuiteditinfo ,CompteGratuiteditdetails,ComptePayanteditdetails,Comptepayanteditinfo
+from django.contrib.auth import views as auth_views
 urlpatterns=[
     
     path('AcceuilComptepayant/',views.AcceuilComptepayant,name='AcceuilComptepayant'),
@@ -18,14 +18,23 @@ urlpatterns=[
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         views.activate, name='activate'),
     path('logout/',views.logout_view,name='logout'),
-    path('compteGratuitprofile/<str:slug>',views.compteGratuitprofile,name="compteGratuitprofile"),
-    path('compteGratuiteditinfo/<str:slug>',compteGratuiteditinfo.as_view(),name="compteGratuiteditinfo"),
-    path('compteGratuiteditdetails/<str:slug>',compteGratuiteditdetails.as_view(),name="compteGratuiteditdetails"),
+    path('checkingEmail/',views.checkingEmail,name='checkingEmail'),
+    path('confirmationpage/',views.confirmationpage,name='confirmationpage'),
+    
+    path('compteGratuiteditinfo/<str:slug>',CompteGratuiteditinfo.as_view(),name="compteGratuiteditinfo"),
+    path('compteGratuiteditdetails/<str:slug>',CompteGratuiteditdetails.as_view(),name="compteGratuiteditdetails"),
+
+    path('profile/<str:slug>',views.comptepayantprofile,name="comptepayantprofile"),
+    path('EditInfo/<str:slug>',Comptepayanteditinfo.as_view(),name="comptePayanteditinfo"),
+    path('EditDetail/<str:slug>',ComptePayanteditdetails.as_view(),name="comptePayanteditdetails"),
+    path('password_reset/',auth_views.PasswordResetView.as_view(template_name='Accounts/password_reset.html'),name="password_reset"),
+    path('password_reset_done/',auth_views.PasswordResetDoneView.as_view(template_name='Accounts/password_reset_done.html'),name="password_reset_done"),
+    path('password_reset_confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='Accounts/password_reset_confirm.html'),name="password_reset_confirm"),
+    path('password_reset_complete/',auth_views.PasswordResetCompleteView.as_view(template_name='Accounts/password_reset_complete.html'),name="password_reset_complete"),
+    path('contact/',views.contact,name="contact"),
+    path('confirmpagecontact/',views.confirmpagecontact,name='confirmpagecontact'),
 ]
-"""
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
-"""
+
 
 if settings.DEBUG:
     urlpatterns += [

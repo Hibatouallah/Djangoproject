@@ -2,14 +2,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-           
-<h2>Editer profile details:</h2> <br>
-<form method="POST">
+<br><br><br>
+<div class="container">              
+<h2>Edit profil details:</h2> <br>
+<form method="POST"  enctype="multipart/form-data">
     {% csrf_token%}
+    {{ form.media }}
     {{form.as_p}}
-    <button class="btn btn-secondary">Editer</button>
+    <button class="btn btn-primary">Edit</button>
 </form>
-
+</div> 
+<br><br><br>
 
 {% endblock %}
 

@@ -2,26 +2,22 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from .models import Comptegratuit,Comptepayant,Utilisateur
 from django import forms
+from django.forms import ModelForm
 
 class ComptegratuitInscriptionForm(UserCreationForm):
     username = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
     cin = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
     last_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
     first_name = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
-    website = forms.CharField(required=False,widget=forms.TextInput(attrs={'class':'form-control'}))
-    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'form-control'}),required = False)
     email = forms.EmailField(required=True,widget=forms.EmailInput(attrs={'class':'form-control'}))
-    ville = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
     photoprofil = forms.ImageField(required = False,widget=forms.FileInput())
-    photocouverture = forms.ImageField(required = False,widget=forms.FileInput())
-    pays = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
-    codepostal = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
     numtel =forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
    
 
     class Meta(UserCreationForm.Meta):
         model = Utilisateur
-        fields = ('username','cin','last_name','first_name','password1','password2','website','description','email','ville','photoprofil','photocouverture','pays','codepostal','numtel')
+        fields = ('username','cin','last_name','first_name','password1','password2','description','email','photoprofil','numtel')
 
     def __init__(self, *args,**kwargs):
         super(ComptegratuitInscriptionForm,self).__init__(*args,**kwargs)
@@ -36,22 +32,15 @@ class ComptegratuitInscriptionForm(UserCreationForm):
         utilisateur.email = self.cleaned_data.get('email')
         utilisateur.last_name = self.cleaned_data.get('last_name')
         utilisateur.first_name = self.cleaned_data.get('first_name')
+        utilisateur.photoprofil = self.cleaned_data.get('photoprofil')
         utilisateur.uncomptegratuit = True
 
         utilisateur.save()
         comptegratuit = Comptegratuit.objects.create(utilisateur = utilisateur)
         comptegratuit.cin  = self.cleaned_data.get('cin')
- 
-    
-        comptegratuit.website = self.cleaned_data.get('website')
         comptegratuit.description = self.cleaned_data.get('description')
-        comptegratuit.ville = self.cleaned_data.get('ville')
-        comptegratuit.photoprofil = self.cleaned_data.get('photoprofil')
-        comptegratuit.photocouverture = self.cleaned_data.get('photocouverture')
-        comptegratuit.pays = self.cleaned_data.get('pays')
-        comptegratuit.codepostal = self.cleaned_data.get('codepostal')
         comptegratuit.numtel = self.cleaned_data.get('numtel')
-        comptegratuit.location = self.cleaned_data.get('location')
+
         comptegratuit.save()
         return utilisateur
 
@@ -86,14 +75,57 @@ class ComptepayantInscriptionForm(UserCreationForm):
         utilisateur.email = self.cleaned_data.get('email')
         utilisateur.first_name = self.cleaned_data.get('first_name')
         utilisateur.last_name = self.cleaned_data.get('last_name')
-
+        utilisateur.photoprofil = self.cleaned_data.get('photoprofil')
         utilisateur.save()
         comptepayant = Comptepayant.objects.create(utilisateur = utilisateur)
         comptepayant.cin  = self.cleaned_data.get('cin')
 
         comptepayant.pays = self.cleaned_data.get('pays')
         comptepayant.codepostal = self.cleaned_data.get('codepostal')
-        comptepayant.photoprofil = self.cleaned_data.get('photoprofil')
+        
         comptepayant.numtel = self.cleaned_data.get('numtel')
         comptepayant.save()
         return utilisateur
+
+
+class ModifierUser(forms.ModelForm):
+    photoprofil = forms.ImageField(required=False, widget=forms.FileInput)
+    class Meta:
+        model = Utilisateur
+        fields = ('username','first_name','last_name','email','photoprofil')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class':'form-control'}),
+            'first_name': forms.TextInput(attrs={'class':'form-control'}),
+            'last_name': forms.TextInput(attrs={'class':'form-control'}),
+            'email': forms.TextInput(attrs={'class':'form-control'}),
+            'photoprofil' : forms.ImageField(required=False),
+        }
+
+class ModifiercompteGratuit(forms.ModelForm):
+    class Meta:
+        model = Comptegratuit
+        fields = ('cin','description','numtel')
+
+        widgets = {
+            'cin': forms.TextInput(attrs={'class':'form-control'}),
+            'numtel': forms.TextInput(attrs={'class':'form-control'}),
+            'description': forms.Textarea(attrs={'class':'form-control'}),
+        }
+class ModifiercomptePayant(forms.ModelForm):
+    class Meta:
+        model = Comptepayant
+        fields = ('cin','pays','codepostal','numtel')
+
+        widgets = {
+            'cin': forms.TextInput(attrs={'class':'form-control'}),
+            'pays': forms.TextInput(attrs={'class':'form-control'}),
+            'codepostal': forms.TextInput(attrs={'class':'form-control'}),
+            'numtel': forms.TextInput(attrs={'class':'form-control'}),
+        }
+
+class Contact(forms.Form):
+    name = forms.CharField(max_length=80)
+    message = forms.CharField(widget=forms.Textarea)
+    email = forms.EmailField()
+

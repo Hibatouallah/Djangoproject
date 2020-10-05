@@ -1,36 +1,161 @@
-
 {% extends 'base.html' %}
+{% load static %}
 
+{% load crispy_forms_tags %}
 {% block content %}
-           
-<h2>Liste des restaurant:</h2> <br>
+<style>
+ .fa-star {
+  color: orange;
+}
+.empty {
+  color: rgba(11, 12, 12, 0.651);
+}
 
-{% for res in restau %}
-<ul>
-    {% if user.is_authenticated%}
-<li> 
-    <form action="{% url 'like_restau' res.pk %}" method="POST">
-       {% csrf_token %}
-       <button type="submit" name="restaurant_id" class="btn btn-primary" value="{{ res.id }}"> J'aime</button>
-    </form>
-</li>
-{% endif %}
-<li><h4>{{ res.intitule }}</h4></li>
-<li>
-    {% for k in res.cuisine.all %}
-    {{ k.intitule }} -
-    {% endfor %}
-</li>
-<li>
-    <form action="{% url 'detailrestau' res.intitule|slugify %}">
-        <button type="submit"  class="btn btn-primary">Order Online</button>
-     </form>
- </li>
-</ul>
-{% endfor %}
+</style>
+<br><br><br>
+<!-- Page Content -->
+  <div class="container">
+    <center><h1 style="font-family:cursive;">The Best Restaurants in {{ city }}</h1></center>
+    <br><br>
+    <div class="row">
+
+      <div class="col-lg-3">
+
+        <div class="list-group">
+         
+          <h4>Search</h4>
+          
+          <div class="form-check">
+          <form  method="GET">
+            {{ restau_filter.form |crispy }}
+            <button type=Submit class="btn btn-primary">Search</button>
+          </form>
+          
+          
+          </div>
+    
+        </div>
+
+      </div>
+
+
+      <div class="col-lg-9">
+
+        <div class="row">
+          {% for res in page_obj %}
+         
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              {% if user.is_authenticated%}
+                 <a href="{% url 'like_restau' res.pk %}" name="restaurant_id"  value="{{ res.id }}"> 
+                   <img src="{%static 'icone/iconead.png'%}">
+                  </a>
+              </form>
+              {% endif %}
+              <a href="{% url 'detailrestau' res.intitule|slugify %}"><img class="card-img-top" src="{{ res.picture_default.url }}" height="253" width="144" ></a>
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a href="{% url 'detailrestau' res.intitule|slugify %}">{{ res.intitule }}</a>
+                </h4>
+                <h5><li>
+                  
+                  {% for k in res.cuisine.all %}
+                  {%if forloop.counter > 1 %}
+                    ,
+                  {% endif %}
+                  {{ k.intitule }} 
+                  {% endfor %}
+              </li></h5>
+              <form action="{% url 'detailrestau' res.intitule|slugify %}">
+                <button type="submit"  class="btn btn-primary">Order Online</button>
+             </form>
+
+              </div>
+              <div class="card-footer">
+                <span class="fa fa-star {% if res.percentage < 1 %} empty {% endif %}"></span>
+                <span class="fa fa-star {% if res.percentage < 2 %} empty {% endif %}"></span>
+                <span class="fa fa-star {% if res.percentage < 3 %} empty {% endif %}"></span>
+                <span class="fa fa-star {% if res.percentage < 4 %} empty {% endif %}"></span>
+                <span class="fa fa-star {% if res.percentage < 5 %} empty {% endif %}"></span>
+                </div>
+             
+            </div>
+          </div>
+          {% endfor %}
+
+        </div>
+
+
+          </div>
+
+        </div>
+        <!-- /.row -->
+
+
+<hr>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center pagination-sm">
+        {% if page_obj.has_previous %}
+          <!-- If it ain't a search result display, don't append the search query
+               to the URL. -->
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'index' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% else %}
+          <!-- Append the searched query to the URL, so that on a search results page,
+               the pagination don't revert to listing all the listview items. -->
+            <li class="page-item">
+              <a class="page-link" href="{% url 'index' %}?{{search}}&page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        {% endif %} 
+        {% for object in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+        {% endfor %} 
+        {% if page_obj.has_next %}
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'index' %}?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="{% url 'index' %}?{{search}}&page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+      
+
+
+      </div>
+      <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  
 
 {% endblock %}
-
+<script>
+  // Rating Initialization
+$(document).ready(function() {
+  $('#rateMe3').mdbRate();
+});
+</script>
 </html>
 
 

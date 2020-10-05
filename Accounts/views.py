@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect
 from django.views import generic 
 from .models import Comptegratuit,Comptepayant,Utilisateur
-from .form import ComptegratuitInscriptionForm,ComptepayantInscriptionForm
+from .form import ComptegratuitInscriptionForm,ComptepayantInscriptionForm,ModifierUser,ModifiercompteGratuit,ModifiercomptePayant,Contact
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.forms import AuthenticationForm,UserChangeForm
 from django.contrib import messages
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,reverse
 from django.http import HttpResponse
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -14,38 +14,22 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage,send_mail,BadHeaderError
 
 from django.views.generic import UpdateView
 from django.contrib.sessions.backends.db import SessionStore
 
-
-"""
-def profile(request):
-    return render(request,'../templates/profile.html')
-"""
-def profile(request,username):
-    profile= Profile.objects.filter(username=username)
-    context = {
-        'profile': profile,
-    }
-    return render(request,'../templates/Accounts/profile.html',context)
-
 def inscription(request):
     return render(request,'../templates/Accounts/inscription.html')
 def login_view(request):
-    return render(request,'../templates/Accounts/login.html')   
-"""
-class comptegratuit_inscription(CreateView):
-    model = Utilisateur
-    form_class = ComptegratuitInscriptionForm
-    template_name = '../templates/compteGrinscr.html'
-   
-    def form_valid(self,form):
-        utilisateur = form.save()
-        login(self.request,utilisateur)
-        return redirect('AcceuilComptegratuit')
-"""
+    return render(request,'../templates/Accounts/login.html') 
+
+def checkingEmail(request):
+    return render(request,'../templates/Accounts/checkingemail.html')  
+
+def confirmationpage(request):
+    return render(request,'../templates/Accounts/confirmationpage.html') 
+
 def comptegratuit_inscription(request):
         
         if request.method == 'POST':
@@ -67,7 +51,7 @@ def comptegratuit_inscription(request):
                             mail_subject, message, to=[to_email]
                 )
                 email.send()
-                return HttpResponse('Please confirm your email address to complete the registration')
+                return redirect('checkingEmail')
         else:
             form = ComptegratuitInscriptionForm()
         return render(request, '../templates/Accounts/compteGrinscr.html', {'form': form})    
@@ -92,7 +76,7 @@ def comptepayant_inscription(request):
                             mail_subject, message, to=[to_email]
                 )
                 email.send()
-                return HttpResponse('Please confirm your email address to complete the registration')
+                return redirect('checkingEmail')
         else:
             form = ComptepayantInscriptionForm()
         return render(request, '../templates/Accounts/comptepayinscr.html', {'form': form})    
@@ -107,21 +91,10 @@ def activate(request, uidb64, token):
             user.is_active = True
             user.save()
             login(request, user)
-            # return redirect('home')
-            return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+            return redirect('confirmationpage')
         else:
             return HttpResponse('Activation link is invalid!')
-"""
-class comptepayant_inscription(CreateView):
-    model = Utilisateur
-    form_class = ComptepayantInscriptionForm
-    template_name = '../templates/comptepayinscr.html'
-    
-    def form_valid(self,form):
-        utilisateur = form.save()
-        login(self.request,utilisateur)
-        return redirect('AcceuilComptepayant')
-"""
+
 def AcceuilComptepayant(request):
     return render(request,'../templates/Accounts/AcceuilComptepayant.html')
 def AcceuilComptegratuit(request):
@@ -136,7 +109,7 @@ def comptepayant_login(request):
             utilisateur = authenticate(username=username,password=password)
             if utilisateur is not None:
                 login(request,utilisateur)
-                return redirect('../templates/Accounts/AcceuilComptepayant')
+                return redirect('index2')
             else:
                 messages.error(request,"Invalid username or password")
         else:
@@ -165,30 +138,54 @@ def comptegratuit_login(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect('inscription')
 
-def compteGratuitprofile(request,slug):
-    profileCG = Comptegratuit.objects.filter(slug=slug)
-    return render(request,'../templates/Accounts/profile.html', {'profileCG': profileCG })
-"""
-class EditcompteGratuiteditprofile(generic.UpdateView):
-    form_class = UserChangeForm
-    template_name = 'Accounts/edit_profile_CG.html'
-    success_url = reverse_lazy('index')
-
-    def get_object(self):
-        return self.request.Profile
-"""
-class compteGratuiteditinfo(UpdateView):
+class CompteGratuiteditinfo(UpdateView):
     model = Utilisateur 
     template_name = 'Accounts/edit_profile_CG_infos.html'
-    fields = ['username','first_name','last_name','email']
-
-
-
-class compteGratuiteditdetails(generic.UpdateView):
+    form_class = ModifierUser
+    
+class CompteGratuiteditdetails(generic.UpdateView):
     model = Comptegratuit 
     template_name = 'Accounts/edit_profile_CG_details.html'
-    fields = ['photoprofil','cin','description','ville','pays','numtel','website']
+    form_class = ModifiercompteGratuit
 
-    
+class Comptepayanteditinfo(UpdateView):
+    model = Utilisateur 
+    template_name = 'Accounts/edit_profile_CG_infos.html'
+    form_class = ModifierUser
+    def get_success_url(self, **kwargs):
+        return reverse('comptepayantprofile', args=[self.request.user.username])   
+        
+class ComptePayanteditdetails(generic.UpdateView):
+    model = Comptepayant 
+    template_name = 'Accounts/edit_profile_CP_details.html'
+    form_class = ModifiercomptePayant
+    def get_success_url(self, **kwargs):
+        return reverse('comptepayantprofile', args=[self.request.user.username])  
+        
+
+def comptepayantprofile(request,slug):
+    profile = Comptepayant.objects.filter(slug=slug)
+    return render(request,'../templates/Accounts/profile.html', {'profile': profile })
+def confirmpagecontact(request):
+    return render(request,'../templates/Accounts/confirmpagecontact.html')
+
+def contact(request):
+    url = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        form = Contact(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data["name"])
+            print(form.cleaned_data["message"])
+            print(form.cleaned_data["email"])
+            subject = f'Message from {form.cleaned_data["name"]}'
+            message = form.cleaned_data["message"]
+            sender = form.cleaned_data["email"]
+            recipients = ['hibatouallah.1996@gmail.com']
+            try:
+                send_mail(subject,message,sender,recipients,fail_silently=True)
+                return reverse('confirmpagecontact')
+            except BadHeaderError:
+                return HttpResponse('Invalid header found')
+    return  HttpResponseRedirect(url)

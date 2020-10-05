@@ -1,0 +1,159 @@
+{% extends 'base2.html' %}
+{% block title %} {{ restau.intitule_tag }}  {% endblock %}  
+{% load static %}
+{% block content %}
+<!--
+<form action="{% url 'index'  %}">
+    <button type="submit"  class="btn btn-primary"> Retour</button>
+ </form>
+-->
+<style>
+  /* Make the image fully responsive */
+  .carousel-inner img {
+    width: 1110px;
+    height: 500px;
+  }
+ .rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center
+   
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: right;
+    width: 1em;
+    font-size: 3vw;
+    color: #FFD600;
+    cursor: pointer
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
+.fa-star {
+  color: orange;
+}
+.empty {
+  color: rgba(11, 12, 12, 0.651);
+}
+  </style>
+
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+{% for n in restau %}    
+<div class="container">
+<center><h1 style="font-family:cursive;">{{ n.intitule }}</h1></center>
+
+<div class="row">
+  
+<div class="col-sm-12">
+    <div id="demo" class="carousel slide" data-ride="carousel">
+
+      <!-- Indicators -->
+      <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+        <li data-target="#demo" data-slide-to="2"></li>
+      </ul>
+      
+      <!-- The slideshow -->
+      <div class="carousel-inner">
+        {% for k in picture %}
+        {%if forloop.counter == 1 %}
+        <div class="carousel-item active " >
+          <img src="{{ k.image.url }}" class="card-img-top" alt="{{ k.intitule }}" width="1110" height="500">
+        </div>
+        {% else %}
+        <div class="carousel-item " >
+          <img src="{{ k.image.url }}" class="card-img-top" alt="{{ k.intitule }}" width="1110" height="500">
+        </div>
+      
+        {% endif %}
+        {% endfor %}
+      </div>
+      
+      <!-- Left and right controls -->
+      <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+    </div>
+</div>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-header">
+      <h3 style="color:#fed136;"><strong>Details</strong></h3>
+    </div>
+    <ul class="list-group list-group-flush">
+      
+      <li class="list-group-item"><i class='fas fa-hamburger' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{% for k in n.cuisine.all %} {{ k.intitule }} &nbsp&nbsp&nbsp&nbsp{% endfor %}</li>
+      <li class="list-group-item"><i class='far fa-clock'style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.horaire }}</li>
+      <li class="list-group-item"><i class='fas fa-desktop' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.website }}</li>
+      <li class="list-group-item"><i class="fas fa-bread-slice" style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{% for k in n.meals.all %} {{ k.intitule }} &nbsp&nbsp&nbsp&nbsp{% endfor %}</li>
+      <li class="list-group-item"><i class='far fa-money-bill-alt' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.price }}</li>
+      <li class="list-group-item"><img src="{% static 'icone/iconemenu.png'%}" height="20" width="20">&nbsp&nbsp&nbsp&nbsp<a href="{{ n.menu.url }}" >Menu</a></li>
+      <li class="list-group-item">
+        <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-suit-heart-fill" style='color:#fed136' xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+        </svg>&nbsp&nbsp&nbsp&nbsp{{ total }} likes</li>
+    </ul>
+  </div>
+</div>
+<div class="col-sm-6">
+  <div class="card">
+    <div class="card-body">
+   <h3 class="card-title" style="color:#fed136;"><strong>Location et contact</strong></h3>
+      <div id='map' style='width: 400px; height: 300px;'></div>
+      <ul class="list-group list-group-flush">
+       
+        <input type="hidden" id="location" name="variable" value=" {{ localisation }}">
+      <li class="list-group-item"><i class='fas fa-landmark' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.adresse }}</li>
+      <li class="list-group-item"><i class='fas fa-phone-volume' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.numtele }}</li>
+    </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endfor %}
+</div>
+</div> 
+<script>
+  mapboxgl.accessToken = '{{mapbox_access_token}}';
+  var loc = document.getElementById("location").value;
+  var map = new mapboxgl.Map({
+  container: 'map', // container id
+  style: 'mapbox://styles/mapbox/streets-v11',
+  center: ['{{ latitude }}','{{ longitude }}'], // starting position
+  zoom: 9 // starting zoom
+  });
+   
+  // Add zoom and rotation controls to the map.
+  map.addControl(new mapboxgl.NavigationControl());
+  </script>
+  
+</html>
+{% endblock %}

@@ -2,18 +2,18 @@
 {% block title %} page de login {% endblock %}
 {% block content %}
 
+ 
+<br><br><br><br><br>
 <html>
-    <head>
-        <title>Page login</title>
-    </head>
-    <body>
-        <div>
-            <a href="{% url 'comptegratuit_login' %}">comptegratuit</a>
-        </div>
-        <div>
-            <a href="{% url 'comptepayant_login' %}">comptepayant</a>
-        </div>
-    </body>
-</html>
 
+    <header >
+        <div class="container">
+            <center>
+            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'comptegratuit_login' %}">Sign in  as Client For free</a>
+            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger" href="{% url 'comptepayant_login' %}">Sgn in as Restaurant Owner</a>
+        </center>
+        </div>
+    </header>
+</html>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}

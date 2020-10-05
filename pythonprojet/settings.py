@@ -42,8 +42,11 @@ INSTALLED_APPS = [
     'location_field.apps.DefaultConfig',
     'Restaurant',
     'ckeditor',
+    'django_filters',
+    'crispy_forms',
+    'geopy',
 ]
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOCATION_FIELD = {
     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
     'provider.google.api_key': 'AIzaSyD2JZuDWpTyATSngNMbr9SUB7JX-Xo9S3Q',
@@ -139,6 +142,7 @@ STATICFILES_DIRS = (
 )
 
 EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'hibatouallah.1996@gmail.com'
 EMAIL_HOST_PASSWORD = 'jiJI20-21'

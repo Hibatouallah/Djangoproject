@@ -2,8 +2,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-           
-<h2>Editer post infos:</h2> <br>
+<br><br><br>
+<div class="container"> 
+  
+<h2>Edit post infos:</h2> <br>
 {% if user.is_authenticated%}
 <div class="col-sm-9">
 <div class="form-group">
@@ -11,14 +13,15 @@
     {% csrf_token%}
     {{ form.media }}
     {{ form.as_p }}
-    <button class="btn btn-secondary">Editer</button>
+    <button class="btn btn-primary">Edit</button>
 </form>
 </div>
 {% else %}
 <p> authentifiez-vous pour modifier le post ,<a href="{% url 'comptegratuit_login' %}">cliquer ici.</a> </p>
 </div>
 {% endif %}
-
+</div>
+</div> 
 {% endblock %}
 
 </html>

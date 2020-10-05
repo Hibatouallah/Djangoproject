@@ -1,0 +1,28 @@
+
+{% extends 'base2.html' %}
+
+{% block content %}
+<br> <br> <br>
+<div class="container"> 
+<h2>Add  post:</h2> <br>
+{% if user.is_authenticated%}
+<div class="col-sm-6">
+<div class="form-group">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token%}
+    {{ form.media }}
+    {{ form.as_p }}
+
+    <button class="btn btn-primary">Add</button>
+</form>
+</div>
+</div>
+{% else %}
+<p>  Sign in to add  restaurant ,<a href="{% url 'comptepayant_login' %}">click here.</a> </p>
+{% endif %}
+</div>
+{% endblock %}
+
+</html>
+
+

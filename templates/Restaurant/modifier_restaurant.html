@@ -1,0 +1,29 @@
+
+{% extends 'base2.html' %}
+
+{% block content %}
+<br><br><br>
+<div class="container"> 
+  
+<h2>Edit Restaurant infos:</h2> <br>
+{% if user.is_authenticated%}
+<div class="col-sm-9">
+<div class="form-group">
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token%}
+    {{ form.media }}
+    {{ form.as_p }}
+    <button class="btn btn-primary">Edit</button>
+</form>
+</div>
+{% else %}
+<p> authentifiez-vous pour modifier le post ,<a href="{% url 'comptepayant_login' %}">cliquer ici.</a> </p>
+</div>
+{% endif %}
+</div>
+</div> 
+{% endblock %}
+
+</html>
+
+

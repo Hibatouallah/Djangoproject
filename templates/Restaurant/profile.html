@@ -1,0 +1,357 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} profile {% endblock %}
+{% block content %}
+
+   
+{% for p in profileCG %}
+
+<style type="text/css">
+
+.page-inner.no-page-title {
+padding-top: 30px;
+}
+.page-inner {
+position: relative;
+min-height: calc(100% - 56px);
+padding: 20px 30px 40px 30px;
+background: #f3f4f7;
+}
+.card.card-white {
+background-color: #fff;
+border: 1px solid transparent;
+border-radius: 4px;
+box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
+padding: 25px;
+}
+.grid-margin {
+margin-bottom: 2rem;
+}
+.profile-timeline ul li .timeline-item-header {
+width: 100%;
+overflow: hidden;
+}
+.profile-timeline ul li .timeline-item-header img {
+width: 40px;
+height: 40px;
+float: left;
+margin-right: 10px;
+border-radius: 50%;
+}
+.profile-timeline ul li .timeline-item-header p {
+margin: 0;
+color: #000;
+font-weight: 500;
+}
+.profile-timeline ul li .timeline-item-header p span {
+margin: 0;
+color: #8e8e8e;
+font-weight: normal;
+}
+.profile-timeline ul li .timeline-item-header small {
+margin: 0;
+color: #8e8e8e;
+}
+.profile-timeline ul li .timeline-item-post {
+padding: 20px 0 0 0;
+position: relative;
+}
+.profile-timeline ul li .timeline-item-post > img {
+width: 100%;
+}
+.timeline-options {
+overflow: hidden;
+margin-top: 20px;
+margin-bottom: 20px;
+border-bottom: 1px solid #f1f1f1;
+padding: 10px 0 10px 0;
+}
+.timeline-options a {
+display: block;
+margin-right: 20px;
+float: left;
+color: #2b2b2b;
+text-decoration: none;
+}
+.timeline-options a i {
+margin-right: 3px;
+}
+.timeline-options a:hover {
+color: #5369f8;
+}
+.timeline-comment {
+overflow: hidden;
+margin-bottom: 10px;
+width: 100%;
+border-bottom: 1px solid #f1f1f1;
+padding-bottom: 5px;
+}
+.timeline-comment .timeline-comment-header {
+overflow: hidden;
+}
+.timeline-comment .timeline-comment-header img {
+width: 30px;
+border-radius: 50%;
+float: left;
+margin-right: 10px;
+}
+.timeline-comment .timeline-comment-header p {
+color: #000;
+float: left;
+margin: 0;
+font-weight: 500;
+}
+.timeline-comment .timeline-comment-header small {
+font-weight: normal;
+color: #8e8e8e;
+}
+.timeline-comment p.timeline-comment-text {
+display: block;
+color: #2b2b2b;
+font-size: 14px;
+padding-left: 40px;
+}
+.post-options {
+overflow: hidden;
+margin-top: 15px;
+margin-left: 15px;
+}
+.post-options a {
+display: block;
+margin-top: 5px;
+margin-right: 20px;
+float: left;
+color: #2b2b2b;
+text-decoration: none;
+font-size: 16px !important;
+}
+.post-options a:hover {
+color: #5369f8;
+}
+.online {
+position: absolute;
+top: 2px;
+right: 2px;
+display: block;
+width: 9px;
+height: 9px;
+border-radius: 50%;
+background: #ccc;
+}
+.online.on {
+background: #2ec5d3;
+}
+.online.off {
+background: #ec5e69;
+}
+#cd-timeline::before {
+border: 0;
+background: #f1f1f1;
+}
+.cd-timeline-content p,
+.cd-timeline-content .cd-read-more,
+.cd-timeline-content .cd-date {
+font-size: 14px;
+}
+.cd-timeline-img.cd-success {
+background: #2ec5d3;
+}
+.cd-timeline-img.cd-danger {
+background: #ec5e69;
+}
+.cd-timeline-img.cd-info {
+background: #5893df;
+}
+.cd-timeline-img.cd-warning {
+background: #f1c205;
+}
+.cd-timeline-img.cd-primary {
+background: #9f7ce1;
+}
+.page-inner.full-page {
+display: -webkit-box;
+display: -moz-box;
+display: -ms-flexbox;
+display: -webkit-flex;
+display: flex;
+}
+.user-profile-card {
+text-align: center;
+}
+.user-profile-image {
+width: 100px;
+height: 100px;
+margin-bottom: 10px;
+}
+.team .team-member {
+display: block;
+overflow: hidden;
+margin-bottom: 10px;
+float: left;
+position: relative;
+}
+.team .team-member .online {
+top: 5px;
+right: 5px;
+}
+.team .team-member img {
+width: 40px;
+float: left;
+border-radius: 50%;
+margin: 0 5px 0 5px;
+}
+.label.label-success {
+background: #43d39e;
+}
+.label {
+font-weight: 400;
+padding: 4px 8px;
+font-size: 11px;
+display: inline-block;
+line-height: 1;
+color: #fff;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+border-radius: 0.25em;
+}
+
+</style>
+
+
+<div class="container">
+<div class="page-inner no-page-title">
+<!-- start page main wrapper -->
+<div id="main-wrapper">
+	<div class="row">
+		<div class="col-lg-6 ">
+			<div class="card card-white grid-margin">
+				<div class="card-heading clearfix">
+					<center><h4 class="card-title">{{ p.utilisateur.username }}</h4></center>
+				</div>
+				<div class="card-body user-profile-card mb-3">
+					<img src="{{ p.utilisateur.photoprofil.url }}" class="user-profile-image rounded-circle" alt="" />
+				</div>
+			
+				<hr />
+				<div class="card-heading clearfix ">
+					<h4 class="card-title">Informations</h4>
+				</div>
+				<div class="card-body ">
+					<div class="table-responsive">
+						<table class="table table-borderless mb-0 text-muted">
+							<tbody>
+								<tr>
+									<th scope="row">First Name:</th>
+									<td>{{ p.utilisateur.first_name }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Last Name:</th>
+									<td>{{ p.utilisateur.last_name }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Email:</th>
+									<td>{{ p.utilisateur.email }}</td>
+								</tr>
+								{% if user.username ==  p.utilisateur.username %}
+								<tr>
+									<th>
+										<form action="{% url 'compteGratuiteditinfo' p.slug|slugify %}">
+										<button type="submit"  class="btn btn-primary"> Edit infos </button>
+									</form>
+									</th>
+								{% endif %}	
+								
+								</tr>
+							</tbody>
+							
+						
+						</table>
+					</div>
+				</div>
+				<hr />
+				<div class="card-heading clearfix mt-3">
+					<h4 class="card-title">Details</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-borderless mb-0 text-muted">
+							<tbody>
+								<tr>
+									<th scope="row">Cin:</th>
+									<td>{{ p.cin }}</td>
+								</tr>
+								<tr>
+									<th scope="row">Description:</th>
+									<td>{{ p.description }}</td>
+								</tr>
+								<tr>
+									<th scope="row">NumTel:</th>
+									<td>{{ p.numtel }}</td>
+								</tr>
+								{% if user.username ==  p.utilisateur.username %}
+								<tr>
+									<td>
+										<form action="{% url 'compteGratuiteditdetails'  p.slug|slugify %}">
+											<button type="submit"  class="btn btn-primary"> Edit details </button>
+										 </form>
+									</td>
+								</tr>
+								{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-7 col-xl-6">
+			
+			<div class="profile-timeline">
+				<ul class="list-unstyled">
+					{% for p in post %}
+					<li class="timeline-item">
+						<div class="card card-white grid-margin">
+							<div class="card-body">
+								<div class="timeline-item-header">
+									<img src="{{ p.user.utilisateur.photoprofil.url }}" alt="" />
+									<p>{{ p.user.utilisateur.first_name }} {{ p.user.utilisateur.last_name }}<span>  posted a photo</span>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										{% if user.username ==  p.user.utilisateur.username %}
+										<a href="{% url 'editpost' p.id|slugify %}"><i class="fas fa-pen-alt"></i></a>
+										<a href="{% url 'supprimerpost' p.id|slugify %}"><i class="fas fa-trash-alt"></i></a></p>
+										{% endif %}
+								</div>
+								<div class="timeline-item-post">
+									<p>{{ p.description|safe }}</p>
+									<img src="{{ p.image.url }}">
+									<div class="timeline-options">
+										<a href="{% url 'LikePostView' p.id|slugify %}"><i class="fa fa-thumbs-up"></i> Like ({{p.totallikes}})</a>
+									</div>
+									
+									
+								</div>
+							</div>
+						</div>
+					</li>
+					
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		
+		</div>
+	</div>
+	<!-- Row -->
+</div>
+
+</div>
+</div>
+
+
+
+{% endfor %}
+
+{% endblock content %}

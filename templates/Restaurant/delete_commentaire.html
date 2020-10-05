@@ -1,0 +1,23 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<br><br><br>
+<div class=container>
+
+<center>
+<h2>Delete Commentaire: {{ Commentaire.intitule}}</h2> <br>
+<form method="POST" >
+    {% csrf_token%}
+    <strong>Are you sure?</strong>
+    <br/><br/>
+    <button class="btn btn-secondary">Delete comment</button>
+</form>
+</center>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock %}
+
+</html>
+
+

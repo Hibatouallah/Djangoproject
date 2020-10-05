@@ -1,0 +1,127 @@
+{% extends 'base2.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+ .fa-star {
+  color: orange;
+}
+.empty {
+  color: rgba(11, 12, 12, 0.651);
+}
+
+</style>
+<br><br><br>
+<!-- Page Content -->
+  <div class="container">
+    <center><h1 style="font-family:cursive;">My restaurants </h1></center>
+    <br><br>
+      <div class="col-lg-12">
+        <div class="row">
+            {% for res in page_obj %}
+           
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card h-100">
+                  <p>
+                <a href="{% url 'editrestau' res.id|slugify %}"><i class="fas fa-pen-alt"></i></a>
+                <a href="{% url 'supprimerrestau' res.id|slugify %}"><i class="fas fa-trash-alt"></i></a></p>
+                </p>
+                <a href="{% url 'detailrestauowner' res.intitule|slugify %}"><img class="card-img-top" src="{{ res.picture_default.url }}" height="253" width="144" ></a>
+                <div class="card-body">
+                  <h4 class="card-title">
+                    <a href="{% url 'detailrestauowner' res.intitule|slugify %}">{{ res.intitule }}</a>
+                  </h4>
+               
+                <form action="{% url 'detailrestauowner' res.intitule|slugify %}">
+                  <button type="submit"  class="btn btn-primary">Details</button>
+               </form>
+                  
+                </div>
+                
+                <div class="card-footer">
+                  <span class="fa fa-star {% if res.percentage < 1 %} empty {% endif %}"></span>
+                  <span class="fa fa-star {% if res.percentage < 2 %} empty {% endif %}"></span>
+                  <span class="fa fa-star {% if res.percentage < 3 %} empty {% endif %}"></span>
+                  <span class="fa fa-star {% if res.percentage < 4 %} empty {% endif %}"></span>
+                  <span class="fa fa-star {% if res.percentage < 5 %} empty {% endif %}"></span>
+                  </div>
+                  
+              </div>
+            </div>
+            {% endfor %}
+
+
+          </div>
+
+        </div>
+        <!-- /.row -->
+
+
+<hr>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center pagination-sm">
+        {% if page_obj.has_previous %}
+          <!-- If it ain't a search result display, don't append the search query
+               to the URL. -->
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'index2' %}?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% else %}
+          <!-- Append the searched query to the URL, so that on a search results page,
+               the pagination don't revert to listing all the listview items. -->
+            <li class="page-item">
+              <a class="page-link" href="{% url 'index2' %}?{{search}}&page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        {% endif %} 
+        {% for object in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="{% url 'index2' %}?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+        {% endfor %} 
+        {% if page_obj.has_next %}
+          {% if not search %}
+          <li class="page-item">
+              <a class="page-link" href="{% url 'index2' %}?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link" href="{% url 'index2' %}?{{search}}&page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+      
+
+
+      </div>
+      <!-- /.col-lg-9 -->
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  
+
+{% endblock %}
+<script>
+  // Rating Initialization
+$(document).ready(function() {
+  $('#rateMe3').mdbRate();
+});
+</script>
+</html>
+
+
