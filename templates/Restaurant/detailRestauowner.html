@@ -111,7 +111,7 @@
       
       <li class="list-group-item"><i class='fas fa-hamburger' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{% for k in n.cuisine.all %} {{ k.intitule }} &nbsp&nbsp&nbsp&nbsp{% endfor %}</li>
       <li class="list-group-item"><i class='far fa-clock'style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.horaire }}</li>
-      <li class="list-group-item"><i class='fas fa-desktop' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.website }}</li>
+      <li class="list-group-item"><i class='fas fa-desktop' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp<a href="{{ n.website }}">{{ n.website }}</a></li>
       <li class="list-group-item"><i class="fas fa-bread-slice" style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{% for k in n.meals.all %} {{ k.intitule }} &nbsp&nbsp&nbsp&nbsp{% endfor %}</li>
       <li class="list-group-item"><i class='far fa-money-bill-alt' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.price }}</li>
       <li class="list-group-item"><img src="{% static 'icone/iconemenu.png'%}" height="20" width="20">&nbsp&nbsp&nbsp&nbsp<a href="{{ n.menu.url }}" >Menu</a></li>
@@ -126,10 +126,11 @@
   <div class="card">
     <div class="card-body">
    <h3 class="card-title" style="color:#fed136;"><strong>Location et contact</strong></h3>
-      <div id='map' style='width: 400px; height: 300px;'></div>
+   <iframe src="{{n.location}}" width="500" height="400" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
+  </iframe>
       <ul class="list-group list-group-flush">
        
-        <input type="hidden" id="location" name="variable" value=" {{ localisation }}">
+     
       <li class="list-group-item"><i class='fas fa-landmark' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.adresse }}</li>
       <li class="list-group-item"><i class='fas fa-phone-volume' style='color:#fed136'></i>&nbsp&nbsp&nbsp&nbsp{{ n.numtele }}</li>
     </ul>
@@ -141,19 +142,6 @@
 {% endfor %}
 </div>
 </div> 
-<script>
-  mapboxgl.accessToken = '{{mapbox_access_token}}';
-  var loc = document.getElementById("location").value;
-  var map = new mapboxgl.Map({
-  container: 'map', // container id
-  style: 'mapbox://styles/mapbox/streets-v11',
-  center: ['{{ latitude }}','{{ longitude }}'], // starting position
-  zoom: 9 // starting zoom
-  });
-   
-  // Add zoom and rotation controls to the map.
-  map.addControl(new mapboxgl.NavigationControl());
-  </script>
-  
+
 </html>
 {% endblock %}

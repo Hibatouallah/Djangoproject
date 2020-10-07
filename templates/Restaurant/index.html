@@ -66,9 +66,12 @@
                   {{ k.intitule }} 
                   {% endfor %}
               </li></h5>
-              <form action="{% url 'detailrestau' res.intitule|slugify %}">
-                <button type="submit"  class="btn btn-primary">Order Online</button>
-             </form>
+              <div>
+                <form action="{% url 'detailrestau' res.intitule|slugify %}">
+                  <button type="submit"  class="btn btn-primary">More Details</button>
+               </form>
+              </div>
+              
 
               </div>
               <div class="card-footer">

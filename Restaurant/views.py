@@ -30,7 +30,7 @@ def index(request):
     restau = Restaurant.objects.filter(ville=city)  
     """ Pagination """
     restau_filter = RestaurantFilter(request.GET,queryset=restau)
-    paginator = Paginator(restau_filter.qs, 2) # Show 25 contacts per page.
+    paginator = Paginator(restau_filter.qs, 10) # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request,'../templates/Restaurant/index.html', {'page_obj': page_obj,'restau': restau ,'restau_filter':restau_filter,'city':city})
@@ -43,18 +43,14 @@ def detailrestau(request,intitule):
     res = get_object_or_404(Restaurant,intitule=intitule.replace('-',' '))
     total = res.total_likes()
     Picture = PictureRestau.objects.filter(restaurant=res)
-    mapbox_access_token = 'pk.eyJ1IjoiaGliYS10b3UiLCJhIjoiY2tmb2F6dWJ0MXNqNjJ1cWhhdzl5YTZiaSJ9.ExWdXUn5iscTNAHwcvtWsA'
-    g = Nominatim(user_agent="Restaurant")
-    get_adress = res.get_adress()
-    loc = g.geocode(get_adress)
-     
     """ Pagination """
     commentaire = Commentaire.objects.filter(restaurant=res) 
     paginator = Paginator(commentaire, 2) # Show 25 contacts per page.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request,'../templates/Restaurant/detailRestau.html', {'restau': restau ,'total':total,'mapbox_access_token':mapbox_access_token,'longitude':loc.longitude,'latitude':loc.latitude,'picture':Picture,'page_obj':page_obj})
+    #return render(request,'../templates/Restaurant/detailRestau.html', {'restau': restau ,'total':total,'mapbox_access_token':mapbox_access_token,'longitude':loc.longitude,'latitude':loc.latitude,'picture':Picture,'page_obj':page_obj})
+    return render(request,'../templates/Restaurant/detailRestau.html', {'restau': restau ,'total':total,'picture':Picture,'page_obj':page_obj})
 
 
 def LikeView(request,pk):
@@ -152,11 +148,8 @@ def detailrestauowner(request,intitule):
     res = get_object_or_404(Restaurant,intitule=intitule.replace('-',' '))
     total = res.total_likes()
     Picture = PictureRestau.objects.filter(restaurant=res)
-    mapbox_access_token = 'pk.eyJ1IjoiaGliYS10b3UiLCJhIjoiY2tmb2F6dWJ0MXNqNjJ1cWhhdzl5YTZiaSJ9.ExWdXUn5iscTNAHwcvtWsA'
-    g = Nominatim(user_agent="Restaurant")
-    get_adress = res.get_adress()
-    loc = g.geocode(get_adress)
-    return render(request,'../templates/Restaurant/detailRestauowner.html', {'restau': restau ,'total':total,'mapbox_access_token':mapbox_access_token,'longitude':loc.longitude,'latitude':loc.latitude,'picture':Picture})
+
+    return render(request,'../templates/Restaurant/detailRestauowner.html', {'restau': restau ,'total':total,'picture':Picture})
 
 class Editrestau(UpdateView):
     model = Restaurant 

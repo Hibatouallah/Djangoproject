@@ -36,6 +36,7 @@ class Restaurant(models.Model):
     email = models.EmailField(max_length=254)
     horaire = models.CharField(max_length=20)
     adresse = models.CharField(max_length=1000,unique=True)
+    location = models.TextField(unique=True,null=True,blank=True)
     numtele = models.CharField(max_length=20)
     likes = models.ManyToManyField(Comptegratuit,related_name='restaurant',blank=True,null=True)
     price = models.CharField(max_length=50, choices=PRICE,null=True,blank=True)

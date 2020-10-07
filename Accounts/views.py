@@ -174,18 +174,15 @@ def confirmpagecontact(request):
 def contact(request):
     url = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
-        form = Contact(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data["name"])
-            print(form.cleaned_data["message"])
-            print(form.cleaned_data["email"])
-            subject = f'Message from {form.cleaned_data["name"]}'
-            message = form.cleaned_data["message"]
-            sender = form.cleaned_data["email"]
-            recipients = ['hibatouallah.1996@gmail.com']
-            try:
-                send_mail(subject,message,sender,recipients,fail_silently=True)
-                return reverse('confirmpagecontact')
-            except BadHeaderError:
-                return HttpResponse('Invalid header found')
-    return  HttpResponseRedirect(url)
+        message_name = request.POST['name']
+        message_email = request.POST['email']
+        message = request.POST['message']
+        send_mail(
+           'Message from '+ message_name ,
+           message,
+           message_email,
+           ['hibatouallah.1996@gmail.com'],
+        )
+        return redirect('confirmpagecontact')
+    else:
+        return  HttpResponseRedirect(url)
