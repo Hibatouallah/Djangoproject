@@ -144,11 +144,15 @@ class CompteGratuiteditinfo(UpdateView):
     model = Utilisateur 
     template_name = 'Accounts/edit_profile_CG_infos.html'
     form_class = ModifierUser
+    def get_success_url(self, **kwargs):
+        return reverse('compteGratuitprofile', args=[self.request.user.username]) 
     
 class CompteGratuiteditdetails(generic.UpdateView):
     model = Comptegratuit 
     template_name = 'Accounts/edit_profile_CG_details.html'
     form_class = ModifiercompteGratuit
+    def get_success_url(self, **kwargs):
+        return reverse('compteGratuitprofile', args=[self.request.user.username]) 
 
 class Comptepayanteditinfo(UpdateView):
     model = Utilisateur 

@@ -3,7 +3,7 @@ from .models import Restaurant,Post,Commentaire,Cuisine,PictureRestau
 from Accounts.models import Utilisateur,Comptegratuit,Comptepayant
 from django.views.generic import ListView,DetailView,CreateView ,UpdateView,DeleteView
 from django.forms import modelformset_factory
-from.form import PostForm , ComentaireForm , RestaurantForm ,PhotoForm
+from.form import PostForm , CommentaireForm , RestaurantForm ,PhotoForm,UpdateCommentaireForm
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -128,7 +128,7 @@ class Supprimercommentaire(DeleteView):
 class EditCommentaire(UpdateView):
     model = Commentaire 
     template_name = 'Restaurant/modifier_commentaire.html'
-    form_class = ComentaireForm
+    form_class = UpdateCommentaireForm
 
 
 """Owner of Restaurant """

@@ -92,10 +92,9 @@ class ModifierUser(forms.ModelForm):
     photoprofil = forms.ImageField(required=False, widget=forms.FileInput)
     class Meta:
         model = Utilisateur
-        fields = ('username','first_name','last_name','email','photoprofil')
+        fields = ('first_name','last_name','email','photoprofil')
 
         widgets = {
-            'username': forms.TextInput(attrs={'class':'form-control'}),
             'first_name': forms.TextInput(attrs={'class':'form-control'}),
             'last_name': forms.TextInput(attrs={'class':'form-control'}),
             'email': forms.TextInput(attrs={'class':'form-control'}),

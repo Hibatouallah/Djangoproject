@@ -18,9 +18,7 @@ class PostForm(forms.ModelForm):
         }
 
 
-
-
-class ComentaireForm(forms.ModelForm):
+class UpdateCommentaireForm(forms.ModelForm):
     class Meta:
         model = Commentaire
         fields = ('intitule','description')
@@ -28,7 +26,18 @@ class ComentaireForm(forms.ModelForm):
         widgets = {
             'intitule': forms.TextInput(attrs={'class':'form-control'}),
             'description': forms.Textarea(attrs={'class':'form-control'}),
+        }
 
+class CommentaireForm(forms.ModelForm):
+    rate = forms.IntegerField()
+    class Meta:
+        model = Commentaire
+        fields = ('intitule','description','rate')
+
+        widgets = {
+            'intitule': forms.TextInput(attrs={'class':'form-control'}),
+            'description': forms.Textarea(attrs={'class':'form-control'}),
+            'rate': forms.IntegerField(),
         }
 
 class RestaurantForm(forms.ModelForm):
@@ -36,7 +45,7 @@ class RestaurantForm(forms.ModelForm):
     menu = forms.ImageField(required=False, widget=forms.FileInput)
     class Meta:
         model = Restaurant
-        fields = ('cuisine','picture_default','meals','ville','intitule','website','email','horaire','adresse','numtele','price','menu')
+        fields = ('cuisine','picture_default','meals','ville','intitule','website','email','horaire','adresse','location','numtele','price','menu')
 
         widgets = {
             'cuisine': forms.SelectMultiple(attrs={'class':'form-control'}),
@@ -47,6 +56,7 @@ class RestaurantForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class':'form-control'}),
             'horaire': forms.TextInput(attrs={'class':'form-control'}),
             'adresse': forms.Textarea(attrs={'class':'form-control'}),
+            'location':forms.Textarea(attrs={'class':'form-control'}),
             'numtele': forms.TextInput(attrs={'class':'form-control'}),
             'price': forms.Select(attrs={'class':'form-control'}),
             'picture_default': forms.ImageField(required=False),
